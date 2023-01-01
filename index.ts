@@ -36,14 +36,6 @@ const gql = {
 	`,
 };
 
-export type TGQL = {
-	topicProductCollection: NSContentful.DTO.TMyTopic[];
-	portfolio: {
-		portfolioCollection: NSContentful.DTO.TPortfolio[];
-		portfolioCategoryCollection: NSContentful.DTO.TPortfolioCategory[];
-	};
-};
-
 export class ContentfulService {
 	//#region Singleton setup
 	private static instance: ContentfulService;
@@ -84,7 +76,7 @@ export class ContentfulService {
 		});
 	}
 
-	async get(query: keyof TGQL, config: NSContentful.TApiConfig = {}) {
+	async get(query: keyof NSContentful.TGQL, config: NSContentful.TApiConfig = {}) {
 		const promise = fetch(
 			`https://graphql.contentful.com/content/v1/spaces/${this._spaceID}/environments/${
 				config.env ?? "master"
@@ -95,7 +87,7 @@ export class ContentfulService {
 			.then((res) => res.data);
 
 		if (config.delay) {
-			return new Promise<TGQL[typeof query]>((resolve) => {
+			return new Promise<NSContentful.TGQL[typeof query]>((resolve) => {
 				setTimeout(() => {
 					resolve(promise);
 				}, config.delay);

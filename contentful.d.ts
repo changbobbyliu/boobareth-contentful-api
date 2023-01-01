@@ -5,8 +5,15 @@ declare namespace NSContentful {
 		cdaToken: string;
 		cpaToken: string;
 	};
+	type TGQL = {
+		topicProductCollection: DTO.TMyTopic[];
+		portfolio: {
+			portfolioCollection: DTO.TPortfolio[];
+			portfolioCategoryCollection: DTO.TPortfolioCategory[];
+		};
+	};
 
-	declare namespace DTO {
+	namespace DTO {
 		type TMyTopic = { sys: { id: string }; name: string; featuredImage: { url: string } };
 
 		type TPortfolioCategory = { name: string };
