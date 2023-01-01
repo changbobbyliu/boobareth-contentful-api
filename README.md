@@ -1,0 +1,1 @@
+# boobareth-contentful-api
