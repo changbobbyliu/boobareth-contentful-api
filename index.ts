@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { QueryFunction, QueryKey, useQuery } from "react-query";
 
 const gql = {
 	topicProductCollection: `
@@ -35,6 +35,8 @@ const gql = {
 		}
 	`,
 };
+
+type TQueryKey = keyof NSContentful.TGQL;
 
 export class ContentfulService {
 	//#region Singleton setup
@@ -105,19 +107,18 @@ export class ContentfulService {
 	}
 
 	//#region useQuery hooks
+	private static _useQuery = <TQueryFnData, TError>(
+		queryKey: TQueryKey,
+		fn: QueryFunction<TQueryFnData, QueryKey>
+	) => useQuery<TQueryFnData, TError>(queryKey, fn);
+
 	static useGetPortfolioQuery(config: NSContentful.TApiConfig = {}) {
-		return useQuery<
-			{
-				portfolios: NSContentful.DTO.TPortfolio[];
-				portfolioCategories: NSContentful.DTO.TPortfolioCategory[];
-			},
-			{ message: string }
-		>("portfolio", () =>
+		return this._useQuery<NSContentful.TGQL["portfolio"], { message: string }>("portfolio", () =>
 			ContentfulService.getInstance()
 				.get("portfolio", config)
 				.then((res) => ({
-					portfolios: res.portfolioCollection.items,
-					portfolioCategories: res.portfolioCategoryCollection.items,
+					portfolioCollection: res.portfolioCollection.items,
+					portfolioCategoryCollection: res.portfolioCategoryCollection.items,
 				}))
 		);
 	}
