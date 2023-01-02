@@ -1,6 +1,8 @@
 import { QueryFunction, QueryKey, useQuery } from "@tanstack/react-query";
 
-const gql = {
+const gql: {
+	[key in keyof NSContentful.TGQL]: string;
+} = {
 	topicProductCollection: `
     query topicProductCollection($preview: Boolean) {
       topicProductCollection(preview: $preview) {
