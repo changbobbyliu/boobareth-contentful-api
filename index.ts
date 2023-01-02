@@ -1,4 +1,4 @@
-import { QueryFunction, QueryKey, useQuery } from "react-query";
+import { QueryFunction, QueryKey, useQuery } from "@tanstack/react-query";
 
 const gql = {
 	topicProductCollection: `
@@ -110,7 +110,11 @@ export class ContentfulService {
 	private static _useQuery = <TQueryFnData, TError>(
 		queryKey: TQueryKey,
 		fn: QueryFunction<TQueryFnData, QueryKey>
-	) => useQuery<TQueryFnData, TError>(queryKey, fn);
+	) =>
+		useQuery<TQueryFnData, TError>({
+			queryKey: [queryKey],
+			queryFn: fn,
+		});
 
 	static useGetPortfolioQuery(config: NSContentful.TApiConfig = {}) {
 		return this._useQuery<NSContentful.TGQL["portfolio"], { message: string }>("portfolio", () =>
